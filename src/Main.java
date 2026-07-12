@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Mes[] meses = criarMeses();
+        Persistencia.carregar(meses);
 
         boolean sair = false;
         while (!sair) {
@@ -25,8 +26,9 @@ public class Main {
             }
         }
 
+        Persistencia.salvar(meses);
         scanner.close();
-        System.out.println("Programa encerrado.");
+        System.out.println("Programa encerrado. Dados salvos em gastos.dat");
     }
 
     private static Mes[] criarMeses() {
@@ -46,6 +48,10 @@ public class Main {
         System.out.println("0 - Sair");
     }
 
+    /**
+     * Mostra o menu de um mês específico.
+     * Retorna true se o usuário escolheu sair do programa inteiro.
+     */
     private static boolean menuMes(Scanner scanner, Mes mes, Mes[] meses, int indice) {
         while (true) {
             System.out.println("=== " + mes.getNome() + " - Gastos ===");
@@ -65,12 +71,12 @@ public class Main {
                     verGastos(mes);
                     break;
                 case 3:
-                    zerarGastos(mes);
+                    zerarGastos(mes, meses);
                     break;
                 case 4:
-                    return false;
+                    return false; // volta pro menu principal
                 case 0:
-                    return true;
+                    return true;  // sai do programa
                 default:
                     System.out.println("Opção inválida.");
             }
@@ -78,7 +84,7 @@ public class Main {
     }
 
     private static void adicionarGasto(Scanner scanner, Mes mes, Mes[] meses, int indice) {
-        scanner.nextLine();
+        scanner.nextLine(); // limpa o buffer antes de ler texto
 
         System.out.println("Insira o nome do gasto: ");
         String nome = scanner.nextLine();
@@ -92,6 +98,7 @@ public class Main {
         Gasto gasto = new Gasto(nome, valor, totalParcelas);
         mes.adicionarGasto(gasto);
 
+        // Distribui as parcelas seguintes nos meses posteriores
         for (int i = 1; i < totalParcelas; i++) {
             if (indice + i < meses.length) {
                 Gasto novaParcela = new Gasto(nome, valor, totalParcelas);
@@ -107,6 +114,8 @@ public class Main {
         } else {
             System.out.println("Valor à vista adicionado.");
         }
+
+        Persistencia.salvar(meses);
     }
 
     private static void verGastos(Mes mes) {
@@ -125,8 +134,9 @@ public class Main {
         }
     }
 
-    private static void zerarGastos(Mes mes) {
+    private static void zerarGastos(Mes mes, Mes[] meses) {
         mes.zerarGastos();
+        Persistencia.salvar(meses);
         System.out.println("Gastos de " + mes.getNome() + " zerados com sucesso!");
     }
 
@@ -137,6 +147,7 @@ public class Main {
         }
         return scanner.nextInt();
     }
+
 
     private static double lerDouble(Scanner scanner) {
         while (!scanner.hasNextDouble()) {
