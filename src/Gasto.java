@@ -1,30 +1,30 @@
 public class Gasto {
 
-    String nome;
-    double valor;
-    int parcelas;
-    int parcelaAtual;
+    private final String nome;
+    private final double valor;
+    private final int totalParcelas;
+    private int parcelaAtual;
 
-    public Gasto(String nome, double valor, int parcelas){
+    public Gasto(String nome, double valor, int totalParcelas) {
         this.nome = nome;
         this.valor = valor;
-        this.parcelas = parcelas;
+        this.totalParcelas = totalParcelas;
         this.parcelaAtual = 1;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 
-    public double getValor(){
+    public double getValor() {
         return valor;
     }
 
-    public int getParcelas(){
-        return parcelas;
+    public int getTotalParcelas() {
+        return totalParcelas;
     }
 
-    public int getParcelaAtual(){
+    public int getParcelaAtual() {
         return parcelaAtual;
     }
 
@@ -32,5 +32,7 @@ public class Gasto {
         parcelaAtual++;
     }
 
+    public boolean isAVista() {
+        return totalParcelas <= 1;
+    }
 }
-

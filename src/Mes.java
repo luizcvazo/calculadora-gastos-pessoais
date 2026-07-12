@@ -1,11 +1,13 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Mes {
 
-    String nome;
-    ArrayList<Gasto> gastos;
+    private final String nome;
+    private final List<Gasto> gastos;
 
-    public Mes(String nome){
+    public Mes(String nome) {
         this.nome = nome;
         this.gastos = new ArrayList<>();
     }
@@ -14,8 +16,8 @@ public class Mes {
         return nome;
     }
 
-    public ArrayList<Gasto> getGastos(){
-        return gastos;
+    public List<Gasto> getGastos() {
+        return Collections.unmodifiableList(gastos);
     }
 
     public void adicionarGasto(Gasto gasto) {
